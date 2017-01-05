@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buyerologie.video.dao.PlayListVideoRelationDao" >
+  <resultMap id="BaseResultMap" type="com.buyerologie.video.model.PlayListVideoRelation" >
+    <result column="PLAY_LIST_ID" property="playListId" jdbcType="BIGINT" />
+    <result column="VIDEO_ID" property="videoId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.buyerologie.video.model.PlayListVideoRelation" >
+    insert into play_list_video_r
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="playListId != null" >
+        PLAY_LIST_ID,
+      </if>
+      <if test="videoId != null" >
+        VIDEO_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="playListId != null" >
+        #{playListId,jdbcType=BIGINT},
+      </if>
+      <if test="videoId != null" >
+        #{videoId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteByPlayListIdAndVideoId">
+  	  delete from play_list_video_r
+   	  where PLAY_LIST_ID = #{playListId} and VIDEO_ID = #{videoId}
+  </delete>
+  
+  <delete id="deleteByPlayListId" parameterType="long">
+  	  delete from play_list_video_r
+   	  where PLAY_LIST_ID = #{playListId}
+  </delete>
+  
+  <select id="selectVideoListByPlayListId" parameterType="long" resultType="string">
+  	select VIDEO_ID
+  	from play_list_video_r
+  	where PLAY_LIST_ID = #{playListId}
+  </select>
+  
+  <select id="selectByVideoId" parameterType="string" resultType="long">
+  	select PLAY_LIST_ID
+  	from play_list_video_r
+  	where VIDEO_ID = #{videoId}
+  </select>
+  
+  <select id="selectByPlayListIdAndVideoId" resultMap="BaseResultMap">
+  	select *
+  	from play_list_video_r
+   	where PLAY_LIST_ID = #{playListId} and VIDEO_ID = #{videoId}
+   	limit 1
+  </select>
+  
+</mapper>

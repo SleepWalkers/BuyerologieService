@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buyerologie.topic.dao.TopicTitleDao">
+  <resultMap id="BaseResultMap" type="com.buyerologie.topic.model.TopicTitle">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="CREATOR_ID" jdbcType="BIGINT" property="creatorId" />
+    <result column="CATE_ID" jdbcType="INTEGER" property="cateId" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="IS_DELETE" jdbcType="TINYINT" property="isDelete" />
+    <result column="GMT_CREATED" jdbcType="TIMESTAMP" property="gmtCreated" />
+    <result column="GMT_MODIFIED" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    ID, CREATOR_ID, CATE_ID, TITLE, IS_DELETE, GMT_CREATED, GMT_MODIFIED
+  </sql>
+  
+
+  <insert id="insert" parameterType="com.buyerologie.topic.model.TopicTitle" useGeneratedKeys="true" keyProperty="id">
+    insert into topic_title
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="creatorId != null">
+        CREATOR_ID,
+      </if>
+      <if test="cateId != null">
+        CATE_ID,
+      </if>
+      <if test="title != null">
+        TITLE,
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE,
+      </if>
+      <if test="gmtCreated != null">
+        GMT_CREATED,
+      </if>
+      <if test="gmtModified != null">
+        GMT_MODIFIED,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="cateId != null">
+        #{cateId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreated != null">
+        #{gmtCreated,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.buyerologie.topic.model.TopicTitle">
+    update topic_title
+    <set>
+      <if test="creatorId != null">
+        CREATOR_ID = #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="cateId != null">
+        CATE_ID = #{cateId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreated != null">
+        GMT_CREATED = #{gmtCreated,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        GMT_MODIFIED = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="deleteById" parameterType="java.lang.Integer">
+    update topic_title
+    set IS_DELETE = TRUE
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from topic_title
+    where ID = #{id,jdbcType=BIGINT} and IS_DELETE = FALSE
+  </select>
+  
+  <select id="selectByCateId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from topic_title
+    where CATE_ID = #{cateId,jdbcType=INTEGER} and IS_DELETE = FALSE
+    order by ID desc
+	<if test="start >= 0">
+		<if test="limit > 0 ">
+			limit ${start},${limit}
+		</if>
+	</if>
+  </select>
+  
+  <select id="selectByTopicIds" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from topic_title
+    where ID in (${topicIds}) and IS_DELETE = FALSE
+  </select>
+  
+  
+  
+  <select id="countByCateId" parameterType="java.lang.Integer" resultType="int">
+    select count(ID)
+    from topic_title
+    where CATE_ID = #{cateId,jdbcType=INTEGER} and IS_DELETE = FALSE
+  </select>
+  
+</mapper>

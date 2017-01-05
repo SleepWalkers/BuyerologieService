@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buyerologie.topic.dao.TopicImageRelationDao">
+  <resultMap id="BaseResultMap" type="com.buyerologie.topic.model.TopicImageRelation">
+    <result column="TOPIC_TITLE_ID" jdbcType="BIGINT" property="topicTitleId" />
+    <result column="IMAGE_ID" jdbcType="BIGINT" property="imageId" />
+    <result column="TYPE" jdbcType="TINYINT" property="type" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.buyerologie.topic.model.TopicImageRelation">
+    insert into topic_image_r
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="topicTitleId != null">
+        TOPIC_TITLE_ID,
+      </if>
+      <if test="imageId != null">
+        IMAGE_ID,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="topicTitleId != null">
+        #{topicTitleId,jdbcType=BIGINT},
+      </if>
+      <if test="imageId != null">
+        #{imageId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="delete" parameterType="int">
+  	delete from topic_image_r where IMAGE_ID = #{imageId} and TOPIC_TITLE_ID = #{titleId}
+  </delete>
+</mapper>

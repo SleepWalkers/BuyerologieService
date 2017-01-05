@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+	<classPathEntry location="C:/Users/Sleepwalker/.m2/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar"/>
+	<context id="context1" >
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+    	<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/buyerology" userId="root" password="19900718" />
+    	<javaModelGenerator targetPackage="com.buyerologie.video.model" targetProject="BuyerologieService" />
+    	<sqlMapGenerator targetPackage="com.buyerologie.video.dao" targetProject="BuyerologieService" />
+    	<javaClientGenerator targetPackage="com.buyerologie.video.dao" targetProject="BuyerologieService" type="XMLMAPPER" />
+   	
+    
+    	<table tableName="play_list_video_r" domainObjectName="PlayListVideoRelation" 
+    		enableCountByExample="false"
+    		enableUpdateByExample="false" 
+      		enableDeleteByExample="false"
+      		enableSelectByExample="false" 
+      		selectByExampleQueryId="false"/>
+  </context>
+</generatorConfiguration>

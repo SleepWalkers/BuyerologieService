@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buyerologie.cms.dao.CmsPageModuleRelationDao" >
+	<resultMap id="CmsPageModuleRelationMap" type="com.buyerologie.cms.model.CmsPageModuleRelation" >
+		<result column="page_id" property="pageId" jdbcType="BIGINT" />
+		<result column="module_id" property="moduleId" jdbcType="BIGINT" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.buyerologie.cms.model.CmsPageModuleRelation" keyProperty="id" useGeneratedKeys="true">
+		insert into cms_page_module_r ( page_id, module_id
+		  )
+		values ( #{pageId,jdbcType=BIGINT}, #{moduleId,jdbcType=BIGINT}
+		  )
+	</insert>
+	
+	<update id="updateById" parameterType="com.buyerologie.cms.model.CmsPageModuleRelation" >
+		update cms_page_module_r
+		<set >
+		  <if test="pageId != null" >
+		    page_id = #{pageId,jdbcType=BIGINT},
+		  </if>
+		  <if test="moduleId != null" >
+		    module_id = #{moduleId,jdbcType=BIGINT},
+		  </if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<select id="selectById" resultMap="CmsPageModuleRelationMap" parameterType="int" >
+		select *
+		from cms_page_module_r
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectByModuleId" resultMap="CmsPageModuleRelationMap" parameterType="int">
+		select *
+		from cms_page_module_r
+		where module_id = #{moduleId}
+	</select>
+	
+	<select id="selectByPageId" resultMap="CmsPageModuleRelationMap" parameterType="int">
+		select *
+		from cms_page_module_r
+		where page_id = #{pageId}
+	</select>
+	
+	<delete id="deleteByPageId" parameterType="int">
+		delete from cms_page_module_r
+		where page_id = #{pageId}
+	</delete>
+	
+	<delete id="deleteByModuleId" parameterType="int">
+		delete from cms_page_module_r
+		where module_id = #{moduleId}
+	</delete>
+	
+	<delete id="deleteById" parameterType="int" >
+		delete from cms_page_module_r
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	
+</mapper>

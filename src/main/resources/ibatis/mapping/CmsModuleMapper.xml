@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buyerologie.cms.dao.CmsModuleDao">
+	<resultMap id="ModuleMap" type="com.buyerologie.cms.model.CmsModule">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="GMT_CREATED" property="gmtCreated" jdbcType="TIMESTAMP" />
+		<result column="GMT_MODIFIED" property="gmtModified" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.buyerologie.cms.model.CmsModule"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into cms_module 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="gmtCreated != null">
+			GMT_CREATE,
+		</if>
+		<if test="gmtModified != null">
+			GMT_MODIFY,
+		</if>
+		NAME
+		</trim>
+		
+	  	<trim prefix="values (" suffix=")" suffixOverrides="," >
+		<if test="gmtCreated != null">
+			#{gmtCreated},
+		</if>
+		<if test="gmtModified != null">
+			#{gmtModified},
+		</if>
+		#{name,jdbcType=VARCHAR}
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.buyerologie.cms.model.CmsModule">
+		update cms_module
+		<set>
+			<if test="name != null">
+				NAME = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="gmtCreated != null">
+				GMT_CREATED = #{gmtCreated,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectById" resultMap="ModuleMap" parameterType="int">
+		select *
+		from cms_module
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteById" parameterType="int">
+		delete from
+		cms_module
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	
+	<select id="selectDistinctModuleName" parameterType="int" resultType="string">
+		SELECT DISTINCT(ycm.NAME)
+		from cms_module ycm
+		INNER JOIN cms_page_module_r ycrm
+		on ycm.ID = ycrm.MODULE_ID
+		where ycrm.PAGE_ID = #{pageId}
+	</select>
+	
+	<select id="selectModules" parameterType="int" resultMap="ModuleMap">
+		SELECT ycm.*
+		from cms_module ycm
+		INNER JOIN cms_page_module_r ycrm
+		on ycm.ID = ycrm.MODULE_ID
+		where ycrm.PAGE_ID = #{pageId}
+	</select>
+	
+	<select id="selectSameModules" resultMap="ModuleMap" parameterType="int">
+		SELECT 
+		from cms_module module
+		LEFT JOIN cms_page_module_r rpm
+		on module.ID = rpm.MODULE_ID
+		where rpm.PAGE_ID = (SELECT PAGE_ID
+		from cms_page_module_r
+		where MODULE_ID = #{moduleId}) and NAME = (
+		SELECT NAME
+		from cms_module
+		where id = #{moduleId} );
+	</select>
+	
+	<select id="selectModule" resultMap="ModuleMap" parameterType="string">
+		select *
+		from cms_module
+		<where>
+			<if test="pageId != null">
+				id in (
+				select module_id
+				from cms_page_module_r
+				where
+				page_id = #{pageId}
+				)
+			</if>
+
+			<if test="name != null">
+				and NAME = #{name}
+			</if>
+		</where>
+
+		<if test="orderBy != null">
+			order by ${orderBy} desc
+		</if>
+		<include refid="startAndLimit" />
+	</select>
+
+	<select id="countModule" resultType="int" parameterType="string">
+		select count(ID)
+		from cms_module
+		<where>
+			<if test="pageId != null">
+				id in (
+				select module_id
+				from cms_page_module_r
+				where
+				page_id = #{pageId}
+				)
+			</if>
+			<if test="name != null">
+				and NAME = #{name}
+			</if>
+		</where>
+	</select>
+
+	<sql id="startAndLimit">
+		<if test="start != null">
+			<if test="limit != null">
+				limit ${start},${limit}
+			</if>
+		</if>
+
+		<if test="start == null">
+			<if test="limit != null">
+				limit ${limit}
+			</if>
+		</if>
+	</sql>
+</mapper>

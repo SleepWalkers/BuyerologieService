@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buyerologie.cms.dao.CmsDao">
+	
+	<select id="selectSameModuleIds" resultType="int" parameterType="int">
+		SELECT MODULE_ID
+		from cms_module module
+		LEFT JOIN cms_page_module_r rpm
+		on module.ID = rpm.MODULE_ID
+		where rpm.PAGE_ID = (SELECT PAGE_ID
+		from cms_page_module_r
+		where MODULE_ID = #{moduleId}) and module.NAME = (
+		SELECT NAME
+		from cms_module
+		where id = #{moduleId} )
+	</select>
+	
+	<select id="selectByModuleIdListAndRecordId" resultType="int" parameterType="int" >
+    	SELECT record.ID
+		from cms_record record
+		LEFT JOIN cms_module_record_r rmr
+		on record.ID = rmr.RECORD_ID
+		where rmr.MODULE_ID in (${moduleIdList}) and record.NAME = (
+			SELECT NAME
+			from cms_record
+			where id = #{recordId})
+	</select>
+</mapper>

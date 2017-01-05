@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	
+	<!-- 测试库地址  -->
+	      <!--
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">  
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>  
+        <property name="url" value="jdbc:mysql://192.168.0.120:13307/yunjee_test?characterEncoding=UTF-8" />  
+        <property name="username" value="root" />  
+        <property name="password" value="yunjee0515" />  
+    </bean>
+  -->
+    <!-- 正式库地址  -->
+   
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">  
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>  
+        <property name="url" value="jdbc:mysql://yunjee.com:3306/yunjee?characterEncoding=UTF-8" />  
+        <property name="username" value="root" />  
+        <property name="password" value="yunjee0515" />
+  		<property name="initialSize" value="20" />
+  		<property name="maxActive" value="100" />
+  		<property name="maxIdle" value="50" />
+  		<property name="minIdle" value="20" />
+  		<property name="testOnBorrow" value="true" />
+  		<property name="removeAbandonedTimeout" value="120" />
+  		<property name="removeAbandoned" value="true" />
+  		<property name="timeBetweenEvictionRunsMillis" value="3600000" />
+  		<property name="minEvictableIdleTimeMillis" value="3600000" />  
+    </bean> 
+   
+     
+      
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />  
+        <property name="configLocation" value="classpath:ibatis/sqlMapConfig.xml" />  
+    </bean>
+    
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.yunjee.common.dao" />
+	</bean>  
+
+</beans>

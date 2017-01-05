@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buyerologie.topic.dao.ImageDao">
+  <resultMap id="BaseResultMap" type="com.buyerologie.topic.model.Image">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="IMAGE_PATH" jdbcType="VARCHAR" property="imagePath" />
+    <result column="GMT_CREATED" jdbcType="TIMESTAMP" property="gmtCreated" />
+    <result column="GMT_MODIFIED" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, IMAGE_PATH, GMT_CREATED, GMT_MODIFIED
+  </sql>
+  <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from image
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.buyerologie.topic.model.Image" useGeneratedKeys="true" keyProperty="id"> 
+    insert into image
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="imagePath != null">
+        IMAGE_PATH,
+      </if>
+      <if test="gmtCreated != null">
+        GMT_CREATED,
+      </if>
+      <if test="gmtModified != null">
+        GMT_MODIFIED,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="imagePath != null">
+        #{imagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreated != null">
+        #{gmtCreated,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.buyerologie.topic.model.Image">
+    update image
+    <set>
+      <if test="imagePath != null">
+        IMAGE_PATH = #{imagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreated != null">
+        GMT_CREATED = #{gmtCreated,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        GMT_MODIFIED = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from image
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+	<select id="selectByTopicId"  parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT image.*
+		FROM image
+		INNER JOIN topic_image_r ON image.id = topic_image_r.IMAGE_ID
+		WHERE topic_image_r.TOPIC_TITLE_ID = #{topicId,jdbcType=BIGINT} and topic_image_r.TYPE = #{type}
+	</select>
+</mapper>

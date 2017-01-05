@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buyerologie.user.dao.UserTopicCollectRelationDao">
+  <resultMap id="BaseResultMap" type="com.buyerologie.user.model.UserTopicCollectRelation">
+    <result column="USER_ID" jdbcType="BIGINT" property="userId" />
+    <result column="TOPIC_ID" jdbcType="BIGINT" property="topicId" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.buyerologie.user.model.UserTopicCollectRelation">
+    insert into user_topic_collect_r
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="topicId != null">
+        TOPIC_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="topicId != null">
+        #{topicId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteByUserIdAndTopicId" parameterType="int">
+    delete from user_topic_collect_r
+    where USER_ID = #{userId} and TOPIC_ID = #{topicId}
+  </delete>
+  
+  <select id="selectByUserIdAndTopicId" parameterType="int" resultMap="BaseResultMap">
+  	select * from user_topic_collect_r where USER_ID = #{userId} and TOPIC_ID = #{topicId}
+  </select>
+  
+  <select id="selectByUserIdAndCateId" parameterType="int" resultType="int">
+  	SELECT TOPIC_ID from user_topic_collect_r utcr
+	INNER JOIN topic_title title
+	on utcr.TOPIC_ID = title.ID
+	where title.CATE_ID = #{cateId} and utcr.USER_ID= #{userId}
+  </select>
+  
+</mapper>

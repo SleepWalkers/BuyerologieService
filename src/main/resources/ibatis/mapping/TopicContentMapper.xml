@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buyerologie.topic.dao.TopicContentDao">
+  <resultMap id="BaseResultMap" type="com.buyerologie.topic.model.TopicContent">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="TITLE_ID" jdbcType="BIGINT" property="titleId" />
+    <result column="PARENT_ID" jdbcType="BIGINT" property="parentId" />
+    <result column="CREATOR_ID" jdbcType="BIGINT" property="creatorId" />
+    <result column="VIDEO_ID" jdbcType="VARCHAR" property="videoId" />
+    <result column="REPLY_NUM" jdbcType="INTEGER" property="replyNum" />
+    <result column="IS_DELETE" jdbcType="TINYINT" property="isDelete" />
+    <result column="CONTENT" jdbcType="LONGVARCHAR" property="content" />
+    <result column="GMT_CREATED" jdbcType="TIMESTAMP" property="gmtCreated" />
+    <result column="GMT_MODIFIED" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, TITLE_ID, PARENT_ID, CREATOR_ID, VIDEO_ID, REPLY_NUM, CONTENT, IS_DELETE, GMT_CREATED, 
+    GMT_MODIFIED
+  </sql>
+
+  
+  <insert id="insert" parameterType="com.buyerologie.topic.model.TopicContent">
+    insert into topic_content
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="titleId != null">
+        TITLE_ID,
+      </if>
+      <if test="parentId != null">
+        PARENT_ID,
+      </if>
+      <if test="creatorId != null">
+        CREATOR_ID,
+      </if>
+      <if test="videoId != null">
+        VIDEO_ID,
+      </if>
+      <if test="replyNum != null">
+        REPLY_NUM,
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE,
+      </if>
+      <if test="gmtCreated != null">
+        GMT_CREATED,
+      </if>
+      <if test="gmtModified != null">
+        GMT_MODIFIED,
+      </if>
+      <if test="content != null">
+        CONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="titleId != null">
+        #{titleId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="videoId != null">
+        #{videoId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyNum != null">
+        #{replyNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreated != null">
+        #{gmtCreated,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.buyerologie.topic.model.TopicContent">
+    update topic_content
+    <set>
+      <if test="titleId != null">
+        TITLE_ID = #{titleId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        PARENT_ID = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="creatorId != null">
+        CREATOR_ID = #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="videoId != null">
+        VIDEO_ID = #{videoId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyNum != null">
+        REPLY_NUM = #{replyNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreated != null">
+        GMT_CREATED = #{gmtCreated,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        GMT_MODIFIED = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteByTitleId" parameterType="java.lang.Integer">
+   	update topic_content
+   	SET IS_DELETE = TRUE
+    where  TITLE_ID = #{titleId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="deleteById" parameterType="java.lang.Integer">
+   	update topic_content
+   	SET IS_DELETE = TRUE
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByVideoId" parameterType="string" resultType="int">
+    select TITLE_ID
+    from topic_content
+    where VIDEO_ID = #{videoId} and IS_DELETE = FALSE
+    limit 1
+  </select>
+  
+  <select id="selectByTitleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from topic_content
+    where TITLE_ID = #{titleId,jdbcType=BIGINT} and PARENT_ID != 0 and IS_DELETE = FALSE
+	ORDER BY ID DESC
+	<if test="start >= 0">
+		<if test="limit > 0 ">
+			limit ${start},${limit}
+		</if>
+	</if>
+  </select>
+  
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from topic_content
+    where ID = #{id,jdbcType=BIGINT} and IS_DELETE = FALSE
+  </select>
+  
+  <select id="selectMainContent" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from topic_content
+    where TITLE_ID = #{titleId,jdbcType=BIGINT} and PARENT_ID = 0 and IS_DELETE = FALSE
+	limit 1
+  </select>
+  
+  <select id="selectVideoContentByTitleId" parameterType="String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from topic_content
+    where TITLE_ID in (#{titleIds}) and PARENT_ID = 0 and IS_DELETE = FALSE and VIDEO_ID != ""
+  </select>
+  
+
+  <select id="countByTitleId" parameterType="java.lang.Integer" resultType="int">
+    select count(ID)
+    from topic_content
+    where TITLE_ID = #{titleId,jdbcType=BIGINT} and PARENT_ID != 0 and IS_DELETE = 0
+  </select>  
+
+</mapper>
