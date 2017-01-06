@@ -7,21 +7,18 @@
     <result column="IS_CANCEL" jdbcType="TINYINT" property="isCancel" />
     <result column="TOTAL_PRICE" jdbcType="DOUBLE" property="totalPrice" />
     <result column="ACTUAL_PRICE" jdbcType="DOUBLE" property="actualPrice" />
+    <result column="PRODUCT_ID" jdbcType="INTEGER" property="productId" />
     <result column="OUT_BUYER_ID" jdbcType="VARCHAR" property="outBuyerId" />
     <result column="OUT_BUYER_ACCOUNT" jdbcType="VARCHAR" property="outBuyerAccount" />
-    <result column="OUT_PAY_ORDER_NUMBER" jdbcType="BIGINT" property="outPayOrderNumber" />
+    <result column="OUT_PAY_ORDER_NUMBER" jdbcType="VARCHAR" property="outPayOrderNumber" />
     <result column="PAID_TIME" jdbcType="TIMESTAMP" property="paidTime" />
     <result column="PAY_TYPE" jdbcType="SMALLINT" property="payType" />
     <result column="GMT_CREATED" jdbcType="TIMESTAMP" property="gmtCreated" />
     <result column="GMT_MODIFIED" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
-  <sql id="Base_Column_List">
-    ORDER_NUMBER, BUYER_ID, IS_CANCEL, TOTAL_PRICE, ACTUAL_PRICE, OUT_BUYER_ID, OUT_BUYER_ACCOUNT, 
-    OUT_PAY_ORDER_NUMBER, PAID_TIME, PAY_TYPE, GMT_CREATED, GMT_MODIFIED
-  </sql>
+
   <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+    select *
     from trade_order
     where ORDER_NUMBER = #{orderNumber,jdbcType=BIGINT}
   </select>
@@ -50,6 +47,9 @@
       </if>
       <if test="outBuyerId != null">
         OUT_BUYER_ID,
+      </if>
+      <if test="productId != null">
+        PRODUCT_ID,
       </if>
       <if test="outBuyerAccount != null">
         OUT_BUYER_ACCOUNT,
@@ -89,11 +89,14 @@
       <if test="outBuyerId != null">
         #{outBuyerId,jdbcType=VARCHAR},
       </if>
+      <if test="productId != null">
+        #{productId},
+      </if>
       <if test="outBuyerAccount != null">
         #{outBuyerAccount,jdbcType=VARCHAR},
       </if>
       <if test="outPayOrderNumber != null">
-        #{outPayOrderNumber,jdbcType=BIGINT},
+        #{outPayOrderNumber,jdbcType=VARCHAR},
       </if>
       <if test="paidTime != null">
         #{paidTime,jdbcType=TIMESTAMP},
@@ -124,6 +127,9 @@
       <if test="actualPrice != null">
         ACTUAL_PRICE = #{actualPrice,jdbcType=DOUBLE},
       </if>
+      <if test="productId != null">
+        PRODUCT_ID = #{productId},
+      </if>
       <if test="outBuyerId != null">
         OUT_BUYER_ID = #{outBuyerId,jdbcType=VARCHAR},
       </if>
@@ -131,7 +137,7 @@
         OUT_BUYER_ACCOUNT = #{outBuyerAccount,jdbcType=VARCHAR},
       </if>
       <if test="outPayOrderNumber != null">
-        OUT_PAY_ORDER_NUMBER = #{outPayOrderNumber,jdbcType=BIGINT},
+        OUT_PAY_ORDER_NUMBER = #{outPayOrderNumber,jdbcType=VARCHAR},
       </if>
       <if test="paidTime != null">
         PAID_TIME = #{paidTime,jdbcType=TIMESTAMP},

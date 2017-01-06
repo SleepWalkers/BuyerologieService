@@ -1,5 +1,7 @@
 package com.buyerologie.user.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.buyerologie.user.model.VipDetail;
 
 public interface VipDetailDao {
@@ -10,4 +12,8 @@ public interface VipDetailDao {
     VipDetail selectById(int userId);
 
     void updateById(VipDetail vipDetail);
+
+    VipDetail selectBySourceOrder(@Param("sourceOrder") String sourceOrder);
+
+    VipDetail selectLastByUserId(@Param("userId") int userId);
 }

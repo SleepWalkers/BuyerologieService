@@ -17,7 +17,9 @@ public class TradeOrder {
 
     private String    outBuyerAccount;
 
-    private long      outPayOrderNumber;
+    private String    outPayOrderNumber;
+
+    private int       productId;
 
     private Timestamp paidTime;
 
@@ -83,11 +85,11 @@ public class TradeOrder {
         this.outBuyerAccount = outBuyerAccount;
     }
 
-    public long getOutPayOrderNumber() {
+    public String getOutPayOrderNumber() {
         return outPayOrderNumber;
     }
 
-    public void setOutPayOrderNumber(long outPayOrderNumber) {
+    public void setOutPayOrderNumber(String outPayOrderNumber) {
         this.outPayOrderNumber = outPayOrderNumber;
     }
 
@@ -121,5 +123,13 @@ public class TradeOrder {
 
     public void setGmtModified(Timestamp gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 }

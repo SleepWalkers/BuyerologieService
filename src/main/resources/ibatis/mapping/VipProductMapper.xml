@@ -15,13 +15,6 @@
     ID, NAME, PRICE, AVAILABLE_DAYS, DESCRIPTION, GMT_CREATED, GMT_MODIFIED
   </sql>
   
-  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from vip_product
-    where ID = #{id,jdbcType=INTEGER}
-  </select>
-  
   <delete id="deleteById" parameterType="java.lang.Integer">
     delete from vip_product
     where ID = #{id,jdbcType=INTEGER}
@@ -100,4 +93,19 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vip_product
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from vip_product
+  </select>
+  
 </mapper>

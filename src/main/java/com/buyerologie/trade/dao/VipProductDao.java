@@ -1,5 +1,7 @@
 package com.buyerologie.trade.dao;
 
+import java.util.List;
+
 import com.buyerologie.trade.model.VipProduct;
 
 public interface VipProductDao {
@@ -10,4 +12,6 @@ public interface VipProductDao {
     VipProduct selectById(int id);
 
     void updateById(VipProduct vipProduct);
+
+    List<VipProduct> selectAll();
 }

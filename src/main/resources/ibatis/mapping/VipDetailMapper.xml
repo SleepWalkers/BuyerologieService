@@ -2,19 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buyerologie.user.dao.VipDetailDao">
   <resultMap id="BaseResultMap" type="com.buyerologie.user.model.VipDetail">
-    <id column="USER_ID" jdbcType="BIGINT" property="userId" />
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="USER_ID" jdbcType="BIGINT" property="userId" />
     <result column="START_TIME" jdbcType="TIMESTAMP" property="startTime" />
     <result column="END_TIME" jdbcType="TIMESTAMP" property="endTime" />
     <result column="SOURCE_ORDER" jdbcType="VARCHAR" property="sourceOrder" />
     <result column="GMT_CREATED" jdbcType="TIMESTAMP" property="gmtCreated" />
     <result column="GMT_MODIFIED" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
-  <sql id="Base_Column_List">
-    USER_ID, START_TIME, END_TIME, SOURCE_ORDER, GMT_CREATED, GMT_MODIFIED
-  </sql>
+
   <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+    select *
     from vip_detail
     where USER_ID = #{userId,jdbcType=BIGINT}
   </select>
@@ -23,7 +21,7 @@
     where USER_ID = #{userId,jdbcType=BIGINT}
   </delete>
 
-  <insert id="insert" parameterType="com.buyerologie.user.model.VipDetail">
+  <insert id="insert" parameterType="com.buyerologie.user.model.VipDetail" useGeneratedKeys="true" keyProperty="id">
     insert into vip_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -69,6 +67,9 @@
   <update id="updateById" parameterType="com.buyerologie.user.model.VipDetail">
     update vip_detail
     <set>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=BIGINT},
+      </if>
       <if test="startTime != null">
         START_TIME = #{startTime,jdbcType=TIMESTAMP},
       </if>
@@ -85,7 +86,21 @@
         GMT_MODIFIED = #{gmtModified,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where USER_ID = #{userId,jdbcType=BIGINT}
+    where ID = #{id,jdbcType=BIGINT}
   </update>
 
+  <select id="selectBySourceOrder" parameterType="string" resultMap="BaseResultMap">
+  	select *
+    from vip_product
+    where SOURCE_ORDER = #{sourceOrder,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectLastByUserId" parameterType="int" resultMap="BaseResultMap">
+  	select *
+    from vip_product
+    where USER_ID = #{userId}
+    order by ID desc
+    LIMIT 1
+  </select>
+  
 </mapper>

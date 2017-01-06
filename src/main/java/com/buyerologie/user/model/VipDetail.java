@@ -3,6 +3,9 @@ package com.buyerologie.user.model;
 import java.sql.Timestamp;
 
 public class VipDetail {
+
+    private int       id;
+
     private int       userId;
 
     private Timestamp startTime;
@@ -61,5 +64,13 @@ public class VipDetail {
 
     public void setGmtModified(Timestamp gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
