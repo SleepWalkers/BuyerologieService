@@ -10,8 +10,8 @@ import com.buyerologie.user.exception.UserException;
 
 public interface TradeService {
 
-    long trade(int buyerId, PayType payType, int productId) throws UserException, TradeException,
-                                                           PayException;
+    String trade(int buyerId, PayType payType, int productId) throws UserException, TradeException,
+                                                             PayException;
 
     TradeOrder get(long orderNumber);
 

@@ -13,6 +13,6 @@ public interface PayService {
      * @return
      * @throws PayException 
      */
-    public void pay(long orderNumber, double totalPrice, double actualPrice) throws PayException;
+    public String pay(long orderNumber, double totalPrice, double actualPrice) throws PayException;
 
 }

@@ -58,7 +58,7 @@ public class AlipayService implements PayService {
                                                           .getLogger(AlipayService.class);
 
     @Override
-    public void pay(long orderNumber, double totalPrice, double actualPrice) throws PayException {
+    public String pay(long orderNumber, double totalPrice, double actualPrice) throws PayException {
         HttpServletRequest request = SystemContext.getRequest();
         HttpServletResponse response = SystemContext.getResponse();
         if (request == null || response == null) {
@@ -75,10 +75,7 @@ public class AlipayService implements PayService {
         String notifyUrl = getUrl(serverName, NOTIFY_URL);
         String returnUrl = getUrl(serverName, RETURN_URL);
 
-        String html = getRedirectHtml(orderNumber, actualPrice, notifyUrl, returnUrl);
-
-        redirect2AliPay(html, response);
-
+        return getRedirectHtml(orderNumber, actualPrice, notifyUrl, returnUrl);
     }
 
     private String getRedirectHtml(long orderNumber, double actualPrice, String notifyUrl,
@@ -168,7 +165,7 @@ public class AlipayService implements PayService {
         StringBuffer sbHtml = new StringBuffer();
 
         sbHtml
-            .append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><title>云集--交易</title></head><body><form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\""
+            .append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><title>尚课网--交易</title></head><body><form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\""
                     + ALIPAY_GATEWAY_NEW + "?_input_charset=utf-8\" method=\"" + strMethod + "\">");
 
         for (int i = 0; i < keys.size(); i++) {

@@ -14,11 +14,9 @@ public interface SecurityService {
     public void login(HttpServletRequest request, HttpServletResponse response, String username,
                       String password) throws UserException;
 
-    public void logout(HttpServletRequest paramHttpServletRequest,
-                       HttpServletResponse paramHttpServletResponse);
+    public void logout(HttpServletRequest request, HttpServletResponse response);
 
-    public void setUserDetails(HttpServletRequest paramHttpServletRequest,
-                               UserAuthCredentials paramUserAuthCredentials);
+    public void setUserDetails(HttpServletRequest request, UserAuthCredentials userAuthCredentials);
 
     public void reloadUserDetails();
 
@@ -26,7 +24,7 @@ public interface SecurityService {
 
     public void removeCache(String paramString);
 
-    public void removeCache(UserAuthCredentials paramUserAuthCredentials);
+    public void removeCache(UserAuthCredentials userAuthCredentials);
 
     public String getDefaultCache();
 

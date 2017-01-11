@@ -50,8 +50,8 @@ public class TradeServiceImp implements TradeService {
     private static final Logger logger = Logger.getLogger(TradeServiceImp.class);
 
     @Override
-    public long trade(int buyerId, PayType payType, int productId) throws UserException,
-                                                                  TradeException, PayException {
+    public String trade(int buyerId, PayType payType, int productId) throws UserException,
+                                                                    TradeException, PayException {
 
         if (buyerId <= 0) {
             throw new UserNotFoundException();
@@ -86,8 +86,7 @@ public class TradeServiceImp implements TradeService {
         tradeOrder.setTotalPrice(vipProduct.getPrice());
         tradeOrderDao.insert(tradeOrder);
 
-        alipayService.pay(orderNumber, vipProduct.getPrice(), vipProduct.getPrice());
-        return orderNumber;
+        return alipayService.pay(orderNumber, vipProduct.getPrice(), vipProduct.getPrice());
     }
 
     private long generateOrderNumber(int buyerId, int productId) {
