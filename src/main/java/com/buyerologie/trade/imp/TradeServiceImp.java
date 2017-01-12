@@ -1,6 +1,5 @@
 package com.buyerologie.trade.imp;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -183,14 +182,6 @@ public class TradeServiceImp implements TradeService {
                     valueStr = valueStr + values[i];
                 } else {
                     valueStr = valueStr + values[i] + ",";
-                }
-            }
-            //Get方法乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化
-            if ("get".equalsIgnoreCase(request.getMethod())) {
-                try {
-                    valueStr = new String(valueStr.getBytes("ISO-8859-1"), "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    logger.error("字符编码错误！", e);
                 }
             }
             params.put(name, valueStr);

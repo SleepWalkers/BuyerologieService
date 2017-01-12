@@ -17,12 +17,12 @@
     <result column="GMT_MODIFIED" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
 
-  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectById" parameterType="long" resultMap="BaseResultMap">
     select *
     from trade_order
     where ORDER_NUMBER = #{orderNumber,jdbcType=BIGINT}
   </select>
-  <delete id="deleteById" parameterType="java.lang.Integer">
+  <delete id="deleteById" parameterType="long">
     delete from trade_order
     where ORDER_NUMBER = #{orderNumber,jdbcType=BIGINT}
   </delete>

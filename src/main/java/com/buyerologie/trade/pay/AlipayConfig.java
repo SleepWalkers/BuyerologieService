@@ -1,6 +1,5 @@
 package com.buyerologie.trade.pay;
 
-
 /* *
  *类名：AlipayConfig
  *功能：基础配置类
@@ -24,13 +23,21 @@ package com.buyerologie.trade.pay;
 
 public class AlipayConfig {
 
+    //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
     //↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // 合作身份者ID，以2088开头由16位纯数字组成的字符串
+
+    // 合作身份者ID，签约账号，以2088开头由16位纯数字组成的字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm
     public static String partner       = "2088521244832261";
-    // 商户的私钥
+
+    // 收款支付宝账号，以2088开头由16位纯数字组成的字符串，一般情况下收款账号就是签约账号
+    public static String seller_id     = partner;
+
+    // MD5密钥，安全检验码，由数字和字母组成的32位字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm
     public static String key           = "9ilr9xzgz2mtvhykwb3xltpzjng0gcpk";
 
-    //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+    // 签名方式
+    public static String sign_type     = "MD5";
 
     // 调试用，创建TXT日志文件夹路径
     public static String log_path      = "D:\\";
@@ -38,7 +45,10 @@ public class AlipayConfig {
     // 字符编码格式 目前支持 gbk 或 utf-8
     public static String input_charset = "utf-8";
 
-    // 签名方式 不需修改
-    public static String sign_type     = "MD5";
+    // 支付类型 ，无需修改
+    public static String payment_type  = "1";
+
+    // 调用的接口名，无需修改
+    public static String service       = "create_direct_pay_by_user";
 
 }

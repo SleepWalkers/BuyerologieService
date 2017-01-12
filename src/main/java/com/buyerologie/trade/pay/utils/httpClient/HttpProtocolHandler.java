@@ -1,15 +1,14 @@
 package com.buyerologie.trade.pay.utils.httpClient;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NameValuePair;
@@ -22,7 +21,6 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.util.IdleConnectionTimeoutThread;
-import org.apache.http.HttpException;
 
 /* *
  *类名：HttpProtocolHandler
@@ -37,30 +35,30 @@ import org.apache.http.HttpException;
 
 public class HttpProtocolHandler {
 
-    private static String               DEFAULT_CHARSET                     = "GBK";
+    private static String              DEFAULT_CHARSET                     = "GBK";
 
     /** 连接超时时间，由bean factory设置，缺省为8秒钟 */
-    private final int                   defaultConnectionTimeout            = 8000;
+    private int                        defaultConnectionTimeout            = 8000;
 
     /** 回应超时时间, 由bean factory设置，缺省为30秒钟 */
-    private final int                   defaultSoTimeout                    = 30000;
+    private int                        defaultSoTimeout                    = 30000;
 
     /** 闲置连接超时时间, 由bean factory设置，缺省为60秒钟 */
-    private final int                   defaultIdleConnTimeout              = 60000;
+    private int                        defaultIdleConnTimeout              = 60000;
 
-    private final int                   defaultMaxConnPerHost               = 30;
+    private int                        defaultMaxConnPerHost               = 30;
 
-    private final int                   defaultMaxTotalConn                 = 80;
+    private int                        defaultMaxTotalConn                 = 80;
 
     /** 默认等待HttpConnectionManager返回连接超时（只有在达到最大连接数时起作用）：1秒*/
-    private static final long           defaultHttpConnectionManagerTimeout = 3 * 1000;
+    private static final long          defaultHttpConnectionManagerTimeout = 3 * 1000;
 
     /**
      * HTTP连接管理器，该连接管理器必须是线程安全的.
      */
-    private final HttpConnectionManager connectionManager;
+    private HttpConnectionManager      connectionManager;
 
-    private static HttpProtocolHandler  httpProtocolHandler                 = new HttpProtocolHandler();
+    private static HttpProtocolHandler httpProtocolHandler                 = new HttpProtocolHandler();
 
     /**
      * 工厂方法
@@ -160,15 +158,7 @@ public class HttpProtocolHandler {
             if (request.getResultType().equals(HttpResultType.STRING)) {
                 response.setStringResult(method.getResponseBodyAsString());
             } else if (request.getResultType().equals(HttpResultType.BYTES)) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    method.getResponseBodyAsStream()));
-                StringBuffer stringBuffer = new StringBuffer();
-                String str = "";
-                while ((str = reader.readLine()) != null) {
-                    stringBuffer.append(str);
-                }
-                String ts = stringBuffer.toString();
-                response.setByteResult(ts.getBytes());
+                response.setByteResult(method.getResponseBody());
             }
             response.setResponseHeaders(method.getResponseHeaders());
         } catch (UnknownHostException ex) {
