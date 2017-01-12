@@ -47,8 +47,8 @@ public class VipServiceImp implements VipService {
 
         if (vipDetail != null) {
             if (vipDetail.getEndTime().after(startTime)) {
-                startTime = vipDetail.getEndTime();
-                endTime = DateUtil.addDay(addedAvailableDays, startTime);
+                startTime = vipDetail.getStartTime();
+                endTime = DateUtil.addDay(addedAvailableDays, vipDetail.getEndTime());
             }
         }
         vipDetail = new VipDetail();

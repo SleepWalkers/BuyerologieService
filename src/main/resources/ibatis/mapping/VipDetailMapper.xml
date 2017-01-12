@@ -91,13 +91,13 @@
 
   <select id="selectBySourceOrder" parameterType="string" resultMap="BaseResultMap">
   	select *
-    from vip_product
+    from vip_detail
     where SOURCE_ORDER = #{sourceOrder,jdbcType=VARCHAR}
   </select>
   
   <select id="selectLastByUserId" parameterType="int" resultMap="BaseResultMap">
   	select *
-    from vip_product
+    from vip_detail
     where USER_ID = #{userId}
     order by ID desc
     LIMIT 1

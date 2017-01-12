@@ -1,8 +1,8 @@
 package com.buyerologie.trade.pay.exception;
 
-import com.buyerologie.common.exception.BizException;
+import com.buyerologie.trade.exception.TradeException;
 
-public class PayException extends BizException {
+public class PayException extends TradeException {
 
     private static final long serialVersionUID = 1L;
 

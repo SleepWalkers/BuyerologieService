@@ -25,30 +25,16 @@ import com.buyerologie.trade.pay.utils.AlipaySubmit;
 public class AlipayService implements PayService {
 
     /**
-    * 支付类型
-    */
-    private static final String PAYMENT_TYPE          = "1";
-
-    /**
     * 服务器异步通知页面路径
     */
-    private static final String NOTIFY_URL            = "/pay_notify";
+    private static final String NOTIFY_URL            = "/alipay/pay_notify";
 
     /**
     * 页面跳转同步通知页面路径
     */
-    private static final String RETURN_URL            = "/pay_return";
-
-    private static final String ALIPAY_GATEWAY_NEW    = "https://mapi.alipay.com/gateway.do";
-
-    /**
-    * 卖家支付宝帐户
-    */
-    private static final String SELLER_EMAIL          = "buyerology@126.com";
+    private static final String RETURN_URL            = "/alipay/pay_return";
 
     private static final String PAY_ORDER_DESCRIPTION = "尚课网的订单";
-
-    private static final String BUYEROLOGY_WEBSITE    = "http://www.buyerology.cn";
 
     private static Logger       logger                = LoggerFactory
                                                           .getLogger(AlipayService.class);
