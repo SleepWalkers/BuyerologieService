@@ -1,6 +1,5 @@
 package com.buyerologie.utils;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +18,8 @@ public class QrCodeUtils {
      * @param content
      * @param response
      */
-    public static Image encodeQrcodeImage(String content, int width, int height) {
-        Image image = null;
+    public static BufferedImage encodeQrcodeImage(String content, int width, int height) {
+        BufferedImage image = null;
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         Map<EncodeHintType, String> hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8"); // 设置字符集编码类型

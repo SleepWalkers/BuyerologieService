@@ -138,8 +138,4 @@ public class AlipayTradeService extends AbstractTradeService {
         }
     }
 
-    @Override
-    protected PayService getPayService() {
-        return alipayService;
-    }
 }

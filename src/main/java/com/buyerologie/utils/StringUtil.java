@@ -2,6 +2,7 @@ package com.buyerologie.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -30,6 +31,19 @@ public class StringUtil {
             }
         }
         return strings;
+    }
+
+    public static final String randomString(int length) {
+        char[] numbersAndLetters = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+        if (length < 1) {
+            return "";
+        }
+        Random randGen = new Random();
+        char[] randBuffer = new char[length];
+        for (int i = 0; i < randBuffer.length; i++) {
+            randBuffer[i] = numbersAndLetters[randGen.nextInt(numbersAndLetters.length)];
+        }
+        return new String(randBuffer);
     }
 
     /**

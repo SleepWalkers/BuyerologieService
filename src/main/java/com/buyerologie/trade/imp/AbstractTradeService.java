@@ -8,6 +8,7 @@ import com.buyerologie.enums.PayType;
 import com.buyerologie.trade.ProductService;
 import com.buyerologie.trade.TradeService;
 import com.buyerologie.trade.dao.TradeOrderDao;
+import com.buyerologie.trade.exception.OrderNotExistException;
 import com.buyerologie.trade.exception.PayTypeNotChoseException;
 import com.buyerologie.trade.exception.TradeException;
 import com.buyerologie.trade.exception.VipProductNotExistException;
@@ -33,13 +34,19 @@ public abstract class AbstractTradeService implements TradeService {
     private UserService         userService;
 
     @Resource
+    private PayService          aliPayService;
+
+    @Resource
     private ProductService      productService;
+
+    @Resource
+    private PayService          weixinPayService;
 
     private static final Logger logger = Logger.getLogger(AbstractTradeService.class);
 
     @Override
-    public String trade(int buyerId, PayType payType, int productId) throws UserException,
-                                                                    TradeException {
+    public long trade(int buyerId, PayType payType, int productId) throws UserException,
+                                                                  TradeException {
 
         if (buyerId <= 0) {
             throw new UserNotFoundException();
@@ -74,10 +81,30 @@ public abstract class AbstractTradeService implements TradeService {
         tradeOrder.setTotalPrice(vipProduct.getPrice());
         tradeOrderDao.insert(tradeOrder);
 
-        return getPayService().pay(orderNumber, vipProduct.getPrice(), vipProduct.getPrice());
+        return orderNumber;
     }
 
-    protected abstract PayService getPayService();
+    @Override
+    public String trade(long orderNumber) throws TradeException {
+        TradeOrder tradeOrder = tradeOrderDao.selectById(orderNumber);
+        if (tradeOrder == null) {
+            throw new OrderNotExistException();
+        }
+        PayType payType = PayType.get(tradeOrder.getPayType());
+
+        switch (payType) {
+            case WEIXIN: {
+                return weixinPayService.pay(orderNumber, tradeOrder.getActualPrice(),
+                    tradeOrder.getActualPrice());
+            }
+            case ALIPAY: {
+                return aliPayService.pay(orderNumber, tradeOrder.getActualPrice(),
+                    tradeOrder.getActualPrice());
+            }
+            default:
+                return "";
+        }
+    }
 
     private long generateOrderNumber(int buyerId, int productId) {
         return Long.parseLong((buyerId + "").substring(0, 1) + System.currentTimeMillis()

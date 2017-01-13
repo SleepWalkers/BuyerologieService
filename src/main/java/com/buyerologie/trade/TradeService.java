@@ -10,7 +10,9 @@ import com.buyerologie.vip.exception.VipException;
 
 public interface TradeService {
 
-    String trade(int buyerId, PayType payType, int productId) throws UserException, TradeException;
+    long trade(int buyerId, PayType payType, int productId) throws UserException, TradeException;
+
+    String trade(long orderNumber) throws TradeException;
 
     TradeOrder get(long orderNumber);
 
