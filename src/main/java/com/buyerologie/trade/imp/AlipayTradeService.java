@@ -66,7 +66,7 @@ public class AlipayTradeService extends AbstractTradeService {
 
     @Override
     public boolean payReturn(HttpServletRequest request) throws TradeException, UserException,
-                                                        VipException {
+                                                         VipException {
 
         if (logger.isInfoEnabled()) {
             logger.info("Web Alipay---Start handling the callback/notify result!");
@@ -136,6 +136,11 @@ public class AlipayTradeService extends AbstractTradeService {
             }
             params.put(name, valueStr);
         }
+    }
+
+    @Override
+    protected String doPay(long orderNumber, double price) throws PayException {
+        return alipayService.pay(orderNumber, price, price);
     }
 
 }

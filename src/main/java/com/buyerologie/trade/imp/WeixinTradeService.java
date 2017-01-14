@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.buyerologie.trade.exception.TradeException;
 import com.buyerologie.trade.pay.PayService;
+import com.buyerologie.trade.pay.exception.PayException;
 import com.buyerologie.user.exception.UserException;
 import com.buyerologie.vip.exception.VipException;
 
@@ -18,8 +19,14 @@ public class WeixinTradeService extends AbstractTradeService {
 
     @Override
     public boolean payReturn(HttpServletRequest request) throws TradeException, UserException,
-                                                        VipException {
+                                                         VipException {
         return false;
+    }
+
+    @Override
+    protected String doPay(long orderNumber, double price) throws PayException {
+
+        return weixinPayService.pay(orderNumber, price, price);
     }
 
 }

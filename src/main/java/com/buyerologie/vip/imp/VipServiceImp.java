@@ -32,12 +32,11 @@ public class VipServiceImp implements VipService {
     private UserService  userService;
 
     @Resource
-    private TradeService tradeService;
+    private TradeService alipayTradeService;
 
     @Override
-    public void add(int userId, int addedAvailableDays, long sourceOrder) throws TradeException,
-                                                                         UserException,
-                                                                         VipException {
+    public void add(int userId, int addedAvailableDays,
+                    long sourceOrder) throws TradeException, UserException, VipException {
         validate(userId, addedAvailableDays, sourceOrder);
 
         VipDetail vipDetail = vipDetailDao.selectLastByUserId(userId);
@@ -59,10 +58,8 @@ public class VipServiceImp implements VipService {
         vipDetailDao.insert(vipDetail);
     }
 
-    private void validate(int userId, int addedAvailableDays, long sourceOrder)
-                                                                               throws TradeException,
-                                                                               UserException,
-                                                                               VipException {
+    private void validate(int userId, int addedAvailableDays,
+                          long sourceOrder) throws TradeException, UserException, VipException {
         if (userId < 0) {
             throw new UserNotFoundException();
         }
@@ -78,7 +75,7 @@ public class VipServiceImp implements VipService {
             throw new UserNotFoundException();
         }
 
-        TradeOrder tradeOrder = tradeService.get(sourceOrder);
+        TradeOrder tradeOrder = alipayTradeService.get(sourceOrder);
         if (tradeOrder == null) {
             throw new OrderNotExistException();
         }

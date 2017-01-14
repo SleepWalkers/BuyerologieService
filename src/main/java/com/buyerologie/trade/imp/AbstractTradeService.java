@@ -14,7 +14,7 @@ import com.buyerologie.trade.exception.TradeException;
 import com.buyerologie.trade.exception.VipProductNotExistException;
 import com.buyerologie.trade.model.TradeOrder;
 import com.buyerologie.trade.model.VipProduct;
-import com.buyerologie.trade.pay.PayService;
+import com.buyerologie.trade.pay.exception.PayException;
 import com.buyerologie.user.UserService;
 import com.buyerologie.user.exception.UserException;
 import com.buyerologie.user.exception.UserNotFoundException;
@@ -34,19 +34,13 @@ public abstract class AbstractTradeService implements TradeService {
     private UserService         userService;
 
     @Resource
-    private PayService          aliPayService;
-
-    @Resource
     private ProductService      productService;
-
-    @Resource
-    private PayService          weixinPayService;
 
     private static final Logger logger = Logger.getLogger(AbstractTradeService.class);
 
     @Override
     public long trade(int buyerId, PayType payType, int productId) throws UserException,
-                                                                  TradeException {
+                                                                   TradeException {
 
         if (buyerId <= 0) {
             throw new UserNotFoundException();
@@ -90,25 +84,15 @@ public abstract class AbstractTradeService implements TradeService {
         if (tradeOrder == null) {
             throw new OrderNotExistException();
         }
-        PayType payType = PayType.get(tradeOrder.getPayType());
 
-        switch (payType) {
-            case WEIXIN: {
-                return weixinPayService.pay(orderNumber, tradeOrder.getActualPrice(),
-                    tradeOrder.getActualPrice());
-            }
-            case ALIPAY: {
-                return aliPayService.pay(orderNumber, tradeOrder.getActualPrice(),
-                    tradeOrder.getActualPrice());
-            }
-            default:
-                return "";
-        }
+        return doPay(orderNumber, tradeOrder.getActualPrice());
     }
 
+    protected abstract String doPay(long orderNumber, double price) throws PayException;
+
     private long generateOrderNumber(int buyerId, int productId) {
-        return Long.parseLong((buyerId + "").substring(0, 1) + System.currentTimeMillis()
-                              + productId);
+        return Long
+            .parseLong((buyerId + "").substring(0, 1) + System.currentTimeMillis() + productId);
     }
 
     @Override
@@ -119,7 +103,8 @@ public abstract class AbstractTradeService implements TradeService {
         return tradeOrderDao.selectById(orderNumber);
     }
 
-    protected void addVip(TradeOrder tradeOrder) throws TradeException, UserException, VipException {
+    protected void addVip(TradeOrder tradeOrder) throws TradeException, UserException,
+                                                 VipException {
 
         VipProduct vipProduct = productService.get(tradeOrder.getProductId());
         if (vipProduct == null) {
