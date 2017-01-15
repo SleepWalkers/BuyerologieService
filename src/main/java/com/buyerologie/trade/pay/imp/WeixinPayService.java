@@ -31,20 +31,21 @@ import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
 import com.buyerologie.core.spring.context.SystemContext;
-import com.buyerologie.trade.pay.PayService;
+import com.buyerologie.trade.exception.TradeException;
 import com.buyerologie.trade.pay.WxPayConfig;
 import com.buyerologie.trade.pay.WxScanPayReqData;
 import com.buyerologie.trade.pay.WxScanPayResData;
 import com.buyerologie.trade.pay.exception.PayException;
 import com.buyerologie.trade.pay.utils.WeixinSign;
 import com.buyerologie.trade.pay.utils.XMLParser;
+import com.buyerologie.user.exception.UserException;
+import com.buyerologie.vip.exception.VipException;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 
 @Service("weixinPayService")
-public class WeixinPayService implements PayService {
-
+public class WeixinPayService extends AbstractPayService {
     private Logger              logger         = LoggerFactory.getLogger(WeixinPayService.class);
 
     //请求器的配置
@@ -95,7 +96,7 @@ public class WeixinPayService implements PayService {
         String clientIp = getClientIP();
 
         WxScanPayReqData scanPayReqData = new WxScanPayReqData(
-        //要支付的商品的描述信息，用户会在支付成功页面里看到这个信息
+            //要支付的商品的描述信息，用户会在支付成功页面里看到这个信息
             BODY,
             //支付订单里面可以填的附加数据，API会将提交的这个附加数据原样返回，有助于商户自己可以注明该笔消费的具体内容，方便后续的运营和记录
             "9",
@@ -142,16 +143,16 @@ public class WeixinPayService implements PayService {
      */
 
     public String sendPost(String url, Object xmlObj) throws IOException, KeyStoreException,
-                                                     UnrecoverableKeyException,
-                                                     NoSuchAlgorithmException,
-                                                     KeyManagementException {
+                                                      UnrecoverableKeyException,
+                                                      NoSuchAlgorithmException,
+                                                      KeyManagementException {
 
         String result = null;
         HttpPost httpPost = new HttpPost(url);
 
         //解决XStream对出现双下划线的bug
-        XStream xStreamForRequestPostData = new XStream(new DomDriver("UTF-8",
-            new XmlFriendlyNameCoder("-_", "_")));
+        XStream xStreamForRequestPostData = new XStream(
+            new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
 
         // xStreamForRequestPostData.aliasPackage("", "com.tencent.protocol.pay_protocol");
         xStreamForRequestPostData.aliasType("xml", WxScanPayReqData.class);
@@ -210,10 +211,9 @@ public class WeixinPayService implements PayService {
      * @throws IOException
      * @throws SAXException
      */
-    public boolean checkIsSignValidFromResponseString(String responseString)
-                                                                            throws ParserConfigurationException,
-                                                                            IOException,
-                                                                            SAXException {
+    public boolean checkIsSignValidFromResponseString(String responseString) throws ParserConfigurationException,
+                                                                             IOException,
+                                                                             SAXException {
 
         Map<String, Object> map = XMLParser.getMapFromXML(responseString);
 
@@ -285,6 +285,12 @@ public class WeixinPayService implements PayService {
             e.printStackTrace();
         }
         return clientIP;
+    }
+
+    @Override
+    public boolean payReturn(HttpServletRequest request) throws TradeException, UserException,
+                                                         VipException {
+        return false;
     }
 
 }

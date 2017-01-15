@@ -16,7 +16,7 @@ public interface TradeService {
 
     TradeOrder get(long orderNumber);
 
-    boolean payReturn(HttpServletRequest request) throws TradeException, UserException,
-                                                 VipException;
+    boolean payReturn(HttpServletRequest request, PayType payType) throws TradeException,
+                                                                   UserException, VipException;
 
 }

@@ -1,8 +1,10 @@
 package com.buyerologie.trade.imp;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import com.buyerologie.enums.PayType;
 import com.buyerologie.trade.ProductService;
@@ -14,7 +16,7 @@ import com.buyerologie.trade.exception.TradeException;
 import com.buyerologie.trade.exception.VipProductNotExistException;
 import com.buyerologie.trade.model.TradeOrder;
 import com.buyerologie.trade.model.VipProduct;
-import com.buyerologie.trade.pay.exception.PayException;
+import com.buyerologie.trade.pay.PayService;
 import com.buyerologie.user.UserService;
 import com.buyerologie.user.exception.UserException;
 import com.buyerologie.user.exception.UserNotFoundException;
@@ -22,7 +24,8 @@ import com.buyerologie.user.model.User;
 import com.buyerologie.vip.VipService;
 import com.buyerologie.vip.exception.VipException;
 
-public abstract class AbstractTradeService implements TradeService {
+@Service("tradeService")
+public class TradeServiceImp implements TradeService {
 
     @Resource
     private TradeOrderDao       tradeOrderDao;
@@ -34,9 +37,15 @@ public abstract class AbstractTradeService implements TradeService {
     private UserService         userService;
 
     @Resource
+    private PayService          alipayService;
+
+    @Resource
     private ProductService      productService;
 
-    private static final Logger logger = Logger.getLogger(AbstractTradeService.class);
+    @Resource
+    private PayService          weixinPayService;
+
+    private static final Logger logger = Logger.getLogger(TradeServiceImp.class);
 
     @Override
     public long trade(int buyerId, PayType payType, int productId) throws UserException,
@@ -85,10 +94,21 @@ public abstract class AbstractTradeService implements TradeService {
             throw new OrderNotExistException();
         }
 
-        return doPay(orderNumber, tradeOrder.getActualPrice());
+        PayType payType = PayType.get(tradeOrder.getPayType());
+        switch (payType) {
+            case ALIPAY: {
+                return alipayService.pay(orderNumber, tradeOrder.getActualPrice(),
+                    tradeOrder.getActualPrice());
+            }
+            case WEIXIN: {
+                return weixinPayService.pay(orderNumber, tradeOrder.getActualPrice(),
+                    tradeOrder.getActualPrice());
+            }
+            default: {
+                throw new PayTypeNotChoseException();
+            }
+        }
     }
-
-    protected abstract String doPay(long orderNumber, double price) throws PayException;
 
     private long generateOrderNumber(int buyerId, int productId) {
         return Long
@@ -103,18 +123,23 @@ public abstract class AbstractTradeService implements TradeService {
         return tradeOrderDao.selectById(orderNumber);
     }
 
-    protected void addVip(TradeOrder tradeOrder) throws TradeException, UserException,
-                                                 VipException {
-
-        VipProduct vipProduct = productService.get(tradeOrder.getProductId());
-        if (vipProduct == null) {
-            logger.info("订单号为: " + tradeOrder.getOrderNumber() + "的订单，购买的会员ID为: "
-                        + tradeOrder.getProductId() + "所对应的会员为空");
-            return;
+    @Override
+    public boolean payReturn(HttpServletRequest request,
+                             PayType payType) throws TradeException, UserException, VipException {
+        if (payType == null) {
+            return false;
         }
 
-        vipService.add(tradeOrder.getBuyerId(), vipProduct.getAvailableDays(),
-            tradeOrder.getOrderNumber());
+        switch (payType) {
+            case ALIPAY: {
+                return alipayService.payReturn(request);
+            }
+            case WEIXIN: {
+                return weixinPayService.payReturn(request);
+            }
+            default: {
+                return false;
+            }
+        }
     }
-
 }
