@@ -18,6 +18,19 @@ public class VipDetail {
 
     private Timestamp gmtModified;
 
+    public VipDetail() {
+    }
+
+    public VipDetail(VipDetail vipDetail) {
+        this.id = vipDetail.getId();
+        this.userId = vipDetail.getUserId();
+        this.startTime = vipDetail.getStartTime();
+        this.endTime = vipDetail.getEndTime();
+        this.sourceOrder = vipDetail.getSourceOrder();
+        this.gmtCreated = vipDetail.getGmtCreated();
+        this.gmtModified = vipDetail.getGmtModified();
+    }
+
     public int getUserId() {
         return userId;
     }

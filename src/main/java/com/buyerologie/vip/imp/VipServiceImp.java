@@ -1,6 +1,7 @@
 package com.buyerologie.vip.imp;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -18,6 +19,7 @@ import com.buyerologie.user.exception.UserNotFoundException;
 import com.buyerologie.user.model.User;
 import com.buyerologie.user.model.VipDetail;
 import com.buyerologie.utils.DateUtil;
+import com.buyerologie.utils.PageUtil;
 import com.buyerologie.vip.VipService;
 import com.buyerologie.vip.exception.DuplicateVipOrderException;
 import com.buyerologie.vip.exception.VipException;
@@ -35,8 +37,9 @@ public class VipServiceImp implements VipService {
     private TradeService alipayTradeService;
 
     @Override
-    public void add(int userId, int addedAvailableDays,
-                    long sourceOrder) throws TradeException, UserException, VipException {
+    public void add(int userId, int addedAvailableDays, long sourceOrder) throws TradeException,
+                                                                         UserException,
+                                                                         VipException {
         validate(userId, addedAvailableDays, sourceOrder);
 
         VipDetail vipDetail = vipDetailDao.selectLastByUserId(userId);
@@ -58,8 +61,10 @@ public class VipServiceImp implements VipService {
         vipDetailDao.insert(vipDetail);
     }
 
-    private void validate(int userId, int addedAvailableDays,
-                          long sourceOrder) throws TradeException, UserException, VipException {
+    private void validate(int userId, int addedAvailableDays, long sourceOrder)
+                                                                               throws TradeException,
+                                                                               UserException,
+                                                                               VipException {
         if (userId < 0) {
             throw new UserNotFoundException();
         }
@@ -96,6 +101,17 @@ public class VipServiceImp implements VipService {
             return null;
         }
         return vipDetailDao.selectLastByUserId(userId);
+    }
+
+    @Override
+    public List<VipDetail> get(int page, int pageSize) {
+        return vipDetailDao.selectByLimit(PageUtil.getStart(page, pageSize),
+            PageUtil.getLimit(page, pageSize));
+    }
+
+    @Override
+    public int countVipNum() {
+        return vipDetailDao.countUserNum();
     }
 
 }

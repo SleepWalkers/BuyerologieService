@@ -103,4 +103,26 @@
     LIMIT 1
   </select>
   
+  <select id="selectByLimit" parameterType="int" resultMap="BaseResultMap">
+  	SELECT *
+	FROM vip_detail
+	WHERE id IN (
+			SELECT
+				MAX(ID)
+			FROM
+				vip_detail
+			GROUP BY
+				USER_ID
+		)
+	<if test="start >= 0">
+		<if test="limit > 0">
+			limit ${start}, ${limit}
+		</if>
+	</if>
+  </select>
+  
+  <select id="countUserNum" resultType="int">
+  	SELECT count(DISTINCT (USER_ID))
+	FROM vip_detail
+  </select>
 </mapper>
