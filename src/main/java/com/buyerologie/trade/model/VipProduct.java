@@ -17,6 +17,16 @@ public class VipProduct {
 
     private String    description;
 
+    public VipProduct() {
+    }
+
+    public VipProduct(String name, double price, int availableDays, String description) {
+        this.name = name;
+        this.price = price;
+        this.availableDays = availableDays;
+        this.description = description;
+    }
+
     public int getId() {
         return id;
     }

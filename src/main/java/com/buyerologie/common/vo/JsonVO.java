@@ -37,6 +37,12 @@ public class JsonVO {
         this.isRedirect = false;
     }
 
+    public JsonVO(boolean isSuccess, boolean isRedirect, String redirectUrl) {
+        this.isSuccess = isSuccess;
+        this.isRedirect = isRedirect;
+        this.redirectURL = redirectUrl;
+    }
+
     @Override
     public String toString() {
         return JSON.toJSONString(this);

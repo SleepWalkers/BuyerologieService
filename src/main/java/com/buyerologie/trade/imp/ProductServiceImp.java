@@ -29,4 +29,37 @@ public class ProductServiceImp implements ProductService {
         return vipProductDao.selectById(id);
     }
 
+    @Override
+    public void add(VipProduct vipProduct) {
+        if (vipProduct == null) {
+            return;
+        }
+        vipProductDao.insert(vipProduct);
+    }
+
+    @Override
+    public void delete(int vipProductId) {
+        if (vipProductId <= 0) {
+            return;
+        }
+        vipProductDao.deleteById(vipProductId);
+    }
+
+    @Override
+    public void edit(int productId, String name, double price, int availableDays, String description) {
+        if (productId <= 0) {
+            return;
+        }
+
+        VipProduct originalVipProduct = vipProductDao.selectById(productId);
+        if (originalVipProduct == null) {
+            return;
+        }
+        originalVipProduct.setAvailableDays(availableDays);
+        originalVipProduct.setDescription(description);
+        originalVipProduct.setName(name);
+        originalVipProduct.setPrice(price);
+        vipProductDao.updateById(originalVipProduct);
+    }
+
 }
