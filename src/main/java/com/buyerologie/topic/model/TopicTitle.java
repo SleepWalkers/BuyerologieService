@@ -14,6 +14,8 @@ public class TopicTitle {
 
     private String    title;
 
+    private boolean   isFree;
+
     private boolean   isDelete;
 
     private Timestamp gmtCreated;
@@ -27,6 +29,7 @@ public class TopicTitle {
         this.id = course.getId();
         this.creatorId = course.getCreatorId();
         this.title = course.getTitle();
+        this.isFree = course.getIsFree();
         this.cateId = 2;
     }
 
@@ -34,6 +37,7 @@ public class TopicTitle {
         this.id = detailedNews.getId();
         this.creatorId = detailedNews.getCreatorId();
         this.title = detailedNews.getTitle();
+        this.isFree = true;
         this.cateId = 1;
     }
 
@@ -91,6 +95,14 @@ public class TopicTitle {
 
     public void setGmtModified(Timestamp gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public boolean getIsFree() {
+        return isFree;
+    }
+
+    public void setIsFree(boolean isFree) {
+        this.isFree = isFree;
     }
 
 }

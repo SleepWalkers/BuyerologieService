@@ -31,6 +31,14 @@ public class VipDetail {
         this.gmtModified = vipDetail.getGmtModified();
     }
 
+    public boolean isExpired() {
+        if (startTime.getTime() < System.currentTimeMillis()
+            && endTime.getTime() > System.currentTimeMillis()) {
+            return false;
+        }
+        return true;
+    }
+
     public int getUserId() {
         return userId;
     }

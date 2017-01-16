@@ -18,10 +18,11 @@ public interface CourseService {
 
     int getCourseId(String videoId);
 
-    void createCourse(int creatorId, String title, String videoId, String content)
-                                                                                  throws TopicException;
+    void createCourse(int creatorId, boolean isFree, String title, String videoId, String content)
+                                                                                                  throws TopicException;
 
-    void editCourse(int id, String title, String videoId, String content) throws TopicException;
+    void editCourse(int id, boolean isFree, String title, String videoId, String content)
+                                                                                         throws TopicException;
 
     void deleteCourse(int courseId);
 }

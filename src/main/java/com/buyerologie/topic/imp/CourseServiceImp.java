@@ -89,12 +89,13 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public void createCourse(int creatorId, String title, String videoId, String content)
-                                                                                         throws TopicException {
+    public void createCourse(int creatorId, boolean isFree, String title, String videoId,
+                             String content) throws TopicException {
         TopicTitle topicTitle = new TopicTitle();
         topicTitle.setCateId(TopicCate.COURSE.getCateId());
         topicTitle.setCreatorId(creatorId);
         topicTitle.setTitle(title);
+        topicTitle.setIsFree(isFree);
         topicTitleService.createTitle(topicTitle);
 
         TopicContent topicContent = new TopicContent();
@@ -107,14 +108,15 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public void editCourse(int id, String title, String videoId, String content)
-                                                                                throws TopicException {
+    public void editCourse(int id, boolean isFree, String title, String videoId, String content)
+                                                                                                throws TopicException {
 
         TopicTitle topicTitle = topicTitleService.get(id);
         if (topicTitle == null) {
             return;
         }
         topicTitle.setTitle(title);
+        topicTitle.setIsFree(isFree);
         topicTitleService.editTitle(topicTitle);
 
         TopicContent topicContent = topicContentService.getMainContent(id);

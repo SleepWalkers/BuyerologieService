@@ -6,15 +6,11 @@
     <result column="CREATOR_ID" jdbcType="BIGINT" property="creatorId" />
     <result column="CATE_ID" jdbcType="INTEGER" property="cateId" />
     <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="IS_FREE" jdbcType="TINYINT" property="isFree" />
     <result column="IS_DELETE" jdbcType="TINYINT" property="isDelete" />
     <result column="GMT_CREATED" jdbcType="TIMESTAMP" property="gmtCreated" />
     <result column="GMT_MODIFIED" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
-  
-  <sql id="Base_Column_List">
-    ID, CREATOR_ID, CATE_ID, TITLE, IS_DELETE, GMT_CREATED, GMT_MODIFIED
-  </sql>
-  
 
   <insert id="insert" parameterType="com.buyerologie.topic.model.TopicTitle" useGeneratedKeys="true" keyProperty="id">
     insert into topic_title
@@ -30,6 +26,9 @@
       </if>
       <if test="title != null">
         TITLE,
+      </if>
+      <if test="isFree != null">
+        IS_FREE,
       </if>
       <if test="isDelete != null">
         IS_DELETE,
@@ -53,6 +52,9 @@
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="isFree != null">
+        #{isFree,jdbcType=TINYINT},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -80,6 +82,9 @@
       <if test="isDelete != null">
         IS_DELETE = #{isDelete,jdbcType=TINYINT},
       </if>
+      <if test="isFree != null">
+        IS_FREE = #{isFree,jdbcType=TINYINT},
+      </if>
       <if test="gmtCreated != null">
         GMT_CREATED = #{gmtCreated,jdbcType=TIMESTAMP},
       </if>
@@ -97,15 +102,13 @@
   </update>
   
   <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+    select *
     from topic_title
     where ID = #{id,jdbcType=BIGINT} and IS_DELETE = FALSE
   </select>
   
   <select id="selectByCateId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+    select *
     from topic_title
     where CATE_ID = #{cateId,jdbcType=INTEGER} and IS_DELETE = FALSE
     order by ID desc
@@ -117,8 +120,7 @@
   </select>
   
   <select id="selectByTopicIds" parameterType="string" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+    select *
     from topic_title
     where ID in (${topicIds}) and IS_DELETE = FALSE
   </select>

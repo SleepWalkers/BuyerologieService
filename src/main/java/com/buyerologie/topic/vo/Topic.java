@@ -13,6 +13,8 @@ public class Topic {
 
     private int               creatorId;
 
+    private boolean           isFree;
+
     private String            title;
 
     private String            creatorName;
@@ -35,6 +37,7 @@ public class Topic {
         if (creator != null) {
             this.creatorName = creator.getNickname();
         }
+        this.isFree = topicTitle.getIsFree();
         this.content = topicContent;
         this.postTime = topicTitle.getGmtModified();
     }
@@ -101,6 +104,14 @@ public class Topic {
 
     public void setComments(List<ListComment> comments) {
         this.comments = comments;
+    }
+
+    public boolean getIsFree() {
+        return isFree;
+    }
+
+    public void setIsFree(boolean isFree) {
+        this.isFree = isFree;
     }
 
 }
