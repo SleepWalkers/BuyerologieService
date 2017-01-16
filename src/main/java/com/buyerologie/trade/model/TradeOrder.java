@@ -31,6 +31,26 @@ public class TradeOrder {
 
     private Timestamp gmtModified;
 
+    public TradeOrder() {
+    }
+
+    public TradeOrder(TradeOrder tradeOrder) {
+        this.orderNumber = tradeOrder.getOrderNumber();
+        this.buyerId = tradeOrder.getBuyerId();
+        this.isCancel = tradeOrder.getIsCancel();
+        this.totalPrice = tradeOrder.getTotalPrice();
+        this.actualPrice = tradeOrder.getActualPrice();
+        this.outBuyerAccount = tradeOrder.getOutBuyerAccount();
+        this.outBuyerAccount = tradeOrder.getOutBuyerAccount();
+        this.outPayOrderNumber = tradeOrder.getOutPayOrderNumber();
+        this.productId = tradeOrder.getProductId();
+        this.productName = tradeOrder.getProductName();
+        this.paidTime = tradeOrder.getPaidTime();
+        this.payType = tradeOrder.getPayType();
+        this.gmtCreated = tradeOrder.getGmtCreated();
+        this.gmtModified = tradeOrder.getGmtModified();
+    }
+
     public long getOrderNumber() {
         return orderNumber;
     }

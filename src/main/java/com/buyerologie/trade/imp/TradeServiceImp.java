@@ -1,10 +1,13 @@
 package com.buyerologie.trade.imp;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
+import com.buyerologie.enums.OrderStatus;
 import com.buyerologie.enums.PayType;
 import com.buyerologie.trade.ProductService;
 import com.buyerologie.trade.TradeService;
@@ -20,6 +23,7 @@ import com.buyerologie.user.UserService;
 import com.buyerologie.user.exception.UserException;
 import com.buyerologie.user.exception.UserNotFoundException;
 import com.buyerologie.user.model.User;
+import com.buyerologie.utils.PageUtil;
 import com.buyerologie.vip.VipService;
 import com.buyerologie.vip.exception.VipException;
 
@@ -141,6 +145,50 @@ public class TradeServiceImp implements TradeService {
             default: {
                 return false;
             }
+        }
+    }
+
+    @Override
+    public List<TradeOrder> get(OrderStatus orderStatus, int page, int pageSize) {
+        if (orderStatus == null) {
+            return tradeOrderDao.selectAllByLimit(PageUtil.getStart(page, pageSize),
+                PageUtil.getLimit(page, pageSize));
+        }
+        switch (orderStatus) {
+            case WAIT_BUYER_PAY: {
+                return tradeOrderDao.selectWaitForPayByLimit(PageUtil.getStart(page, pageSize),
+                    PageUtil.getLimit(page, pageSize));
+            }
+            case TRADE_SUCCESS: {
+                return tradeOrderDao.selectPaidOrdersByLimit(PageUtil.getStart(page, pageSize),
+                    PageUtil.getLimit(page, pageSize));
+            }
+            case TRADE_CANCELED: {
+                return tradeOrderDao.selectCanceledByLimit(PageUtil.getStart(page, pageSize),
+                    PageUtil.getLimit(page, pageSize));
+            }
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public int countOrderNum(OrderStatus orderStatus) {
+        if (orderStatus == null) {
+            return tradeOrderDao.countAll();
+        }
+        switch (orderStatus) {
+            case WAIT_BUYER_PAY: {
+                return tradeOrderDao.countWaitForPay();
+            }
+            case TRADE_SUCCESS: {
+                return tradeOrderDao.countPaidOrders();
+            }
+            case TRADE_CANCELED: {
+                return tradeOrderDao.countCanceled();
+            }
+            default:
+                return 0;
         }
     }
 }

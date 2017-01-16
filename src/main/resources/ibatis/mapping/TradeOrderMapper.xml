@@ -164,4 +164,70 @@
     </set>
     where ORDER_NUMBER = #{orderNumber,jdbcType=BIGINT}
   </update>
+  
+  
+
+  <select id="selectAllByLimit" parameterType="long" resultMap="BaseResultMap">
+    select *
+    from trade_order
+    <if test="start >= 0">
+    	<if test="limit > 0">
+    		limit ${start},${limit}
+    	</if>
+    </if>
+  </select>
+
+  <select id="selectWaitForPayByLimit" parameterType="long" resultMap="BaseResultMap">
+    SELECT *
+	FROM trade_order
+	WHERE PAID_TIME IS NULL AND IS_CANCEL = FALSE
+    <if test="start >= 0">
+    	<if test="limit > 0">
+    		limit ${start},${limit}
+    	</if>
+    </if>
+  </select>
+
+  <select id="selectPaidOrdersByLimit" parameterType="long" resultMap="BaseResultMap">
+    SELECT *
+	FROM trade_order
+	WHERE PAID_TIME IS NOT NULL AND IS_CANCEL = FALSE
+    <if test="start >= 0">
+    	<if test="limit > 0">
+    		limit ${start},${limit}
+    	</if>
+    </if>
+  </select>
+
+  <select id="selectCanceledByLimit" parameterType="long" resultMap="BaseResultMap">
+    SELECT *
+	FROM trade_order
+	WHERE IS_CANCEL = TRUE
+    <if test="start >= 0">
+    	<if test="limit > 0">
+    		limit ${start},${limit}
+    	</if>
+    </if>
+  </select>
+  
+  <select id="countAll"  resultType="int">
+    SELECT count(1)
+	FROM trade_order
+  </select>
+  
+  <select id="countWaitForPay"  resultType="int">
+    SELECT count(1)
+	FROM trade_order
+	WHERE PAID_TIME IS NULL AND IS_CANCEL = FALSE
+  </select>
+  <select id="countPaidOrders"  resultType="int">
+    SELECT count(1)
+	FROM trade_order
+	WHERE PAID_TIME IS NOT NULL AND IS_CANCEL = FALSE
+  </select>
+  <select id="countCanceled"  resultType="int">
+    SELECT count(1)
+	FROM trade_order
+	WHERE IS_CANCEL = TRUE
+  </select>
 </mapper>
