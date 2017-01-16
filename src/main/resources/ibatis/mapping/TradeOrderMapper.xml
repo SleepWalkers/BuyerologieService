@@ -230,4 +230,12 @@
 	FROM trade_order
 	WHERE IS_CANCEL = TRUE
   </select>
+  
+  
+  <select id="selectByBuyerId" parameterType="long" resultMap="BaseResultMap">
+    SELECT *
+	FROM trade_order
+	WHERE BUYER_ID = #{buyerId}
+  </select>
+  
 </mapper>

@@ -191,4 +191,12 @@ public class TradeServiceImp implements TradeService {
                 return 0;
         }
     }
+
+    @Override
+    public List<TradeOrder> get(int buyerId) {
+        if (buyerId < 0) {
+            return null;
+        }
+        return tradeOrderDao.selectByBuyerId(buyerId);
+    }
 }

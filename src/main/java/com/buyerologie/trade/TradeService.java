@@ -24,5 +24,7 @@ public interface TradeService {
 
     int countOrderNum(OrderStatus orderStatus);
 
+    List<TradeOrder> get(int buyerId);
+
     List<TradeOrder> get(OrderStatus orderStatus, int page, int pageSize);
 }

@@ -23,6 +23,8 @@ public interface TradeOrderDao {
 
     int countCanceled();
 
+    List<TradeOrder> selectByBuyerId(@Param("buyerId") int buyerId);
+
     List<TradeOrder> selectAllByLimit(@Param("start") int start, @Param("limit") int limit);
 
     List<TradeOrder> selectWaitForPayByLimit(@Param("start") int start, @Param("limit") int limit);
