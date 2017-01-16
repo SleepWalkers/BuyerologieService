@@ -3,7 +3,6 @@ package com.buyerologie.trade.imp;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.buyerologie.enums.PayType;
@@ -28,28 +27,28 @@ import com.buyerologie.vip.exception.VipException;
 public class TradeServiceImp implements TradeService {
 
     @Resource
-    private TradeOrderDao       tradeOrderDao;
+    private TradeOrderDao  tradeOrderDao;
 
     @Resource
-    private VipService          vipService;
+    private VipService     vipService;
 
     @Resource
-    private UserService         userService;
+    private UserService    userService;
 
     @Resource
-    private PayService          alipayService;
+    private PayService     alipayService;
 
     @Resource
-    private ProductService      productService;
+    private ProductService productService;
 
     @Resource
-    private PayService          weixinPayService;
+    private PayService     weixinPayService;
 
-    private static final Logger logger = Logger.getLogger(TradeServiceImp.class);
+    //    private static final Logger logger = Logger.getLogger(TradeServiceImp.class);
 
     @Override
     public long trade(int buyerId, PayType payType, int productId) throws UserException,
-                                                                   TradeException {
+                                                                  TradeException {
 
         if (buyerId <= 0) {
             throw new UserNotFoundException();
@@ -82,6 +81,7 @@ public class TradeServiceImp implements TradeService {
         tradeOrder.setPayType(payType.getPayType());
         tradeOrder.setProductId(productId);
         tradeOrder.setTotalPrice(vipProduct.getPrice());
+        tradeOrder.setProductName(vipProduct.getOrderProductName());
         tradeOrderDao.insert(tradeOrder);
 
         return orderNumber;
@@ -111,8 +111,8 @@ public class TradeServiceImp implements TradeService {
     }
 
     private long generateOrderNumber(int buyerId, int productId) {
-        return Long
-            .parseLong((buyerId + "").substring(0, 1) + System.currentTimeMillis() + productId);
+        return Long.parseLong((buyerId + "").substring(0, 1) + System.currentTimeMillis()
+                              + productId);
     }
 
     @Override
@@ -124,8 +124,9 @@ public class TradeServiceImp implements TradeService {
     }
 
     @Override
-    public boolean payReturn(HttpServletRequest request,
-                             PayType payType) throws TradeException, UserException, VipException {
+    public boolean payReturn(HttpServletRequest request, PayType payType) throws TradeException,
+                                                                         UserException,
+                                                                         VipException {
         if (payType == null) {
             return false;
         }

@@ -21,6 +21,8 @@ public class TradeOrder {
 
     private int       productId;
 
+    private String    productName;
+
     private Timestamp paidTime;
 
     private int       payType;
@@ -131,5 +133,13 @@ public class TradeOrder {
 
     public void setProductId(int productId) {
         this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }

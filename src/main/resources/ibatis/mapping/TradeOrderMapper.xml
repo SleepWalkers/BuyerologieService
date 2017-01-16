@@ -8,6 +8,7 @@
     <result column="TOTAL_PRICE" jdbcType="DOUBLE" property="totalPrice" />
     <result column="ACTUAL_PRICE" jdbcType="DOUBLE" property="actualPrice" />
     <result column="PRODUCT_ID" jdbcType="INTEGER" property="productId" />
+    <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName" />
     <result column="OUT_BUYER_ID" jdbcType="VARCHAR" property="outBuyerId" />
     <result column="OUT_BUYER_ACCOUNT" jdbcType="VARCHAR" property="outBuyerAccount" />
     <result column="OUT_PAY_ORDER_NUMBER" jdbcType="VARCHAR" property="outPayOrderNumber" />
@@ -51,6 +52,9 @@
       <if test="productId != null">
         PRODUCT_ID,
       </if>
+      <if test="productName != null">
+        PRODUCT_NAME,
+      </if>
       <if test="outBuyerAccount != null">
         OUT_BUYER_ACCOUNT,
       </if>
@@ -92,6 +96,9 @@
       <if test="productId != null">
         #{productId},
       </if>
+      <if test="productName != null">
+        #{productName},
+      </if>
       <if test="outBuyerAccount != null">
         #{outBuyerAccount,jdbcType=VARCHAR},
       </if>
@@ -129,6 +136,9 @@
       </if>
       <if test="productId != null">
         PRODUCT_ID = #{productId},
+      </if>
+      <if test="productName != null">
+        PRODUCT_NAME = #{productName},
       </if>
       <if test="outBuyerId != null">
         OUT_BUYER_ID = #{outBuyerId,jdbcType=VARCHAR},

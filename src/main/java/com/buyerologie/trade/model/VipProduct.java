@@ -27,6 +27,10 @@ public class VipProduct {
         this.description = description;
     }
 
+    public String getOrderProductName() {
+        return this.name + "，可用天数：" + this.availableDays;
+    }
+
     public int getId() {
         return id;
     }
