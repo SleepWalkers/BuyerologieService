@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.buyerologie.trade.pay.AlipayConfig;
 import com.buyerologie.trade.pay.WxPayConfig;
 import com.buyerologie.trade.pay.utils.sign.MD5;
 
@@ -30,8 +29,9 @@ public class WeixinSign {
             sb.append(arrayToSort[i]);
         }
         String result = sb.toString();
+        result += "key=" + WxPayConfig.getKey();
         //Util.log("Sign Before MD5:" + result);
-        result = MD5.sign(result, WxPayConfig.getKey(), AlipayConfig.input_charset);
+        result = MD5.MD5Encode(result).toUpperCase();
         //Util.log("Sign Result:" + result);
         return result;
     }
